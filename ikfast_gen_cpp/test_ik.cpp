@@ -7,6 +7,7 @@
 /* external project header files */
 #include "ikfast_interface.hpp"
 /* internal project header files */
+using namespace IKFAST_NAMESPACE;
 
 int main()
 {

@@ -1,2 +1,3 @@
 // config.h.in
-#define PYBIND_NAME @PYBIND_NAME@
+#define IKFAST_NO_MAIN
+#define IKFAST_NAMESPACE @IKFAST_NAMESPACE@

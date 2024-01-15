@@ -7,9 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 # add_compile_options(-O2 -Wall -Wextra -Wpedantic -fPIC)
 
 ## Settings
-set(PYBIND_NAME pyikfast_el_mini_back) # Change this to the name of your python module
+set(IKFAST_NAMESPACE ikfast_ex) # Change this to the name of your python module
 set(SOURCES
-    ikfast_interface.cpp
     ikfast_gen.cpp
 )
 
@@ -18,13 +17,10 @@ include_directories(
 )
 
 # IKFast Library
-add_library(${PROJECT_NAME} ${SOURCES})
-target_compile_options(${PROJECT_NAME} PRIVATE -DIKFAST_NO_MAIN)
-
-# configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h @ONLY)
+add_library(${IKFAST_NAMESPACE} ${SOURCES})
+set_target_properties(${IKFAST_NAMESPACE} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 configure_file(config.h.in ${CMAKE_SOURCE_DIR}/config.h @ONLY)
-target_link_libraries(${PYBIND_NAME} PRIVATE ${PROJECT_NAME})
 
 # Test
 add_executable(test_ik test_ik.cpp)
-target_link_libraries(test_ik PRIVATE ${PROJECT_NAME})
+target_link_libraries(test_ik PRIVATE ${IKFAST_NAMESPACE})
