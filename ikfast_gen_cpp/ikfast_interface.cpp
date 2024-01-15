@@ -77,6 +77,7 @@ std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans)
             std::vector<IkReal> vsolfree(sol.GetFree().size());
             sol.GetSolution(&solvalues[0], vsolfree.size() > 0 ? &vsolfree[0] : NULL);
             std::vector<double> solution;
+            // FIXME: use emplace_back
             for (std::size_t j = 0; j < solvalues.size(); ++j)
                 solution.push_back(solvalues[j]);
             solret.push_back(solution);
