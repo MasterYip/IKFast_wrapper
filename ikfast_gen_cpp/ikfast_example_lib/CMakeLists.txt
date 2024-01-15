@@ -8,10 +8,10 @@ include_directories(
 
 # test example
 add_executable(test_ik1 test_ik.cpp)
-target_link_libraries(test_ik1 ${PROJECT_SOURCE_DIR}/libIKFast1.a)
+target_link_libraries(test_ik1 ${PROJECT_SOURCE_DIR}/libikfast_ex.a)
 
-add_executable(test_ik2 test_ik.cpp)
-target_link_libraries(test_ik2 ${PROJECT_SOURCE_DIR}/libIKFast2.a)
+# add_executable(test_ik2 test_ik.cpp)
+# target_link_libraries(test_ik2 ${PROJECT_SOURCE_DIR}/libIKFast2.a)
 
 # add_executable(test_ik3 test_ik.cpp)
 # target_link_libraries(test_ik3 ${PROJECT_SOURCE_DIR}/libikfast_ex.a)

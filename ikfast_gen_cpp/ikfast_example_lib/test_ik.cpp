@@ -5,10 +5,10 @@
 /* c++ standard library header files */
 
 /* external project header files */
-#include "ikfast_interface.hpp"
+#include "ikfast_ex_interface.h"
 #include <iostream>
 /* internal project header files */
-
+using namespace IKFAST_NAMESPACE;
 int main()
 {
     // double trans[3] = {0.0, 0.0, 0.0};
