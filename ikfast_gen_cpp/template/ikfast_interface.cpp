@@ -1,6 +1,6 @@
 
 /* related header files */
-#include "ikfast_interface.hpp"
+#include "ikfast_interface.h"
 /* c system header files */
 
 /* c++ standard library header files */
