@@ -7,6 +7,8 @@
 /* external project header files */
 #include "@LIB_NAME@.h"
 /* internal project header files */
+
+// Change namespace to call IK for different arms/legs
 using namespace @TEST_NS@;
 
 int main()

@@ -2,41 +2,89 @@
 
 ## Usage
 
+NOTE: C++ lib generation support multiple files, but python binding generation only support one file once a time.
+
+### C++ lib generation
+
 1. Use [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) to generate your IK algorithm
 
-- Note: for 3DTranslation there should be an intermediate link and joint between root link BASE and the arm (unknown reason)
+   > Note: for 3DTranslation there should be an intermediate link and joint between root link BASE and the arm (unknown reason)
+
+2. Add your generated files to /src
+
+   For example:
+
+   ```txt
+   src
+   ├── ikfast_leg1.cpp
+   ├── ikfast_leg2.cpp
+   └── ikfast_leg3.cpp
+   ```
+
+   > Note: the namespace will follow the file name
+
+3. Rename lib in CMakeLists.txt
+
+   ```CMakeLists
+    project(IKFast_warpper)
+    # change this to your library name
+    set(LIB_NAME <your-lib-name>)
+   ```
+
+4. Generate your ikfast lib
+
+   ```bash
+   cd ikfast_gen_cpp
+   bash ./build.sh
+   ```
+
+5. Get your lib in `./lib/<your-lib-name>` and enjoy it using different namespace
+
+   > Note: example is generated as `test.cpp`
+
+Note: if you want change the interface, you can modify `ikfast_interface.h`, `ikfast_interface.cpp`, `ikfast_interface_gen.h.in` in `template` folder.
+
+### Python binding generation
+
+1. Use [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) to generate your IK algorithm
+
+   > Note: for 3DTranslation there should be an intermediate link and joint between root link BASE and the arm (unknown reason)
 
 2. Replace ikfast_gen.cpp with your file
+
 3. Rename pybind module in CMakeLists.txt
 
-```CMakeLists
-## Settings
-set(PYBIND_NAME <replace with your favored name>) # Change this to the name of your python module
-```
+   ```CMakeLists
+   ## Settings
+   set(PYBIND_NAME <replace with your favored name>) # Change this to the name of your python module
+   ```
 
 4. Complie it.
 
-```bash
-mkdir build
-cd build
-cmake ..
-make
-```
+   ```bash
+   mkdir build
+   cd build
+   cmake ..
+   make
+   ```
 
-or specifying python exec path
+   or specifying python exec path
 
-```bash
-mkdir build
-cd build
-cmake .. -DPYTHON_EXECUTABLE=$(which python3)
-make
-```
+   ```bash
+   mkdir build
+   cd build
+   cmake .. -DPYTHON_EXECUTABLE=$(which python3)
+   make
+   ```
 
-5. Get your cpython module in /build
+5. Get your cpython module in /build and use it like:
+
+   ```python
+   from .pyikfast import pyikfast_el_mini as ik
+   from .pyikfast import pyikfast_el_mini_back as ik_back
+   ```
 
 ## Examples
-
-Related cpp code is in `examples`.
 
 ### ElSpider
 
