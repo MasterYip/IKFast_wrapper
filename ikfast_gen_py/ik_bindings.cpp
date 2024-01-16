@@ -12,7 +12,8 @@ void init_core(py::module m)
     // py::module& core(m);
     m.doc() = "pyikfast"; // Optional module docstring
 
-    m.def("IKFast_trans3D", py::overload_cast<const std::vector<double>>(&IKFast_trans3D), py::arg("trans"), "Compute IK for 3D translation");
+    // m.def("IKFast_trans3D", py::overload_cast<const std::vector<double>>(&IKFast_trans3D), py::arg("trans"), "Compute IK for 3D translation");
+    m.def("IKFast_trans3D", py::overload_cast<const std::vector<double>, bool>(&IKFast_trans3D), py::arg("trans"), py::arg("approx"), "Compute IK for 3D translation");
 }
 
 PYBIND11_MODULE(PYBIND_NAME, m)

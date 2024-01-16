@@ -22,4 +22,4 @@ bool ComputeIk(const IkReal *eetrans, const IkReal *eerot, const IkReal *pfree, 
 // Interface
 bool IKFast_trans3D(const double trans[3], double solret[10][3]);
 
-std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans);
+std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans, bool approx = false);
