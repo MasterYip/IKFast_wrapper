@@ -124,19 +124,18 @@ JOINT_STATE_NAME = ["LB_HAA", "LB_HFE", "LB_KFE",
                     "RF_HAA", "RF_HFE", "RF_KFE",
                     "RM_HAA", "RM_HFE", "RM_KFE"]
 
-FOOT_LINK_NAME = ["LB_FOOT", "LF_FOOT", "LM_FOOT",
-                  "RB_FOOT", "RF_FOOT", "RM_FOOT"]
+FOOT_LINK_NAME = ["RF_FOOT", "RM_FOOT", "RB_FOOT",
+                  "LF_FOOT", "LM_FOOT", "LB_FOOT"]
 target = [-0.35350133, 0.22998794, -0.13605704]
 foot_index = 0
-self.mirror_trans = [(np.array((1, 1, 1)), np.array((0, 0, 0))),
-                      (np.array((1, -1, 1)), np.array((0, 0, 0))),
-                      (np.array((1, -1, 1)), np.array((0.3, 0.06, 0))),
-                      (np.array((1, -1, 1)), np.array((0, 0, 0))),
-                      (np.array((1, 1, 1)), np.array((0, 0, 0))),
-                      (np.array((1, 1, 1)), np.array((0.3, 0.06, 0)))]
-pos = target*self.mirror_trans[foot_index][0] + \
-    self.mirror_trans[foot_index][1]
-if foot_index in [0, 3]:
+mirror_trans = [(np.array((1, 1, 1)), np.array((0, 0, 0))),
+                (np.array((1, 1, 1)), np.array((0.3, 0.06, 0))),
+                (np.array((1, -1, 1)), np.array((0, 0, 0))),
+                (np.array((1, -1, 1)), np.array((0, 0, 0))),
+                (np.array((1, -1, 1)), np.array((0.3, 0.06, 0))),
+                (np.array((1, 1, 1)), np.array((0, 0, 0))),]
+pos = target*mirror_trans[foot_index][0] + mirror_trans[foot_index][1]
+if foot_index in [2, 5]:
     sol = ik_back.IKFast_trans3D(list(pos))
 else:
     sol = ik.IKFast_trans3D(list(pos))
