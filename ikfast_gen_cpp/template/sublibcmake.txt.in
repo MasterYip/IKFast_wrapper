@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.0.2)
 
 project(@IKFAST_NAMESPACE@)
 
-add_compile_options(-O3 -Wall -shared -fPIC)
+# mute -Wunused-variable
+# add_compile_options(-O3 -Wall -shared -fPIC)
+add_compile_options(-O3 -Wall -shared -fPIC -Wno-unused-variable)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 set(IKFAST_NAMESPACE @IKFAST_NAMESPACE@)

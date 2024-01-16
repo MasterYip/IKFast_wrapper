@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.0.2)
+
+project(@LIB_NAME@)
+
+
+# add_compile_options(-O3 -Wall -shared -fPIC -Wno-unused-variable)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}
+)
+
+add_library(${PROJECT_NAME})
+file(GLOB ARCHIVE_LIBS ${PROJECT_SOURCE_DIR}/*.a)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ARCHIVE_LIBS})
