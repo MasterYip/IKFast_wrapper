@@ -12,7 +12,7 @@ function(add_IKFast libname namespace srcfile)
     configure_file(${TEMPLATE_DIR}/ikfast.h ${BUILD_DIR}/ikfast.h @ONLY)
     configure_file(${TEMPLATE_DIR}/ikfast_interface.h ${BUILD_DIR}/ikfast_interface.h @ONLY)
     configure_file(${TEMPLATE_DIR}/ikfast_interface.cpp ${BUILD_DIR}/ikfast_interface.cpp @ONLY)
-    configure_file(${TEMPLATE_DIR}/test_ik.cpp ${BUILD_DIR}/test_ik.cpp @ONLY)
+    # configure_file(${TEMPLATE_DIR}/test_ik.cpp ${BUILD_DIR}/test_ik.cpp @ONLY)
     # Cmake
     configure_file(${TEMPLATE_DIR}/sublibcmake.txt.in ${BUILD_DIR}/CMakeLists.txt @ONLY)
     # generated interface

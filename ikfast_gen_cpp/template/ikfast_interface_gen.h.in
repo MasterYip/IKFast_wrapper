@@ -11,9 +11,7 @@
 
 /* internal project header files */
 
-#define IKFAST_NAMESPACE @IKFAST_NAMESPACE@
-
-namespace IKFAST_NAMESPACE
+namespace @IKFAST_NAMESPACE@
 {
     bool IKFast_trans3D(const double trans[3], double solret[10][3]);
 

@@ -3,11 +3,11 @@
 /* c system header files */
 
 /* c++ standard library header files */
-
+#include <iostream>
 /* external project header files */
-#include "ikfast_interface.hpp"
+#include "@LIB_NAME@.h"
 /* internal project header files */
-using namespace IKFAST_NAMESPACE;
+using namespace @TEST_NS@;
 
 int main()
 {
