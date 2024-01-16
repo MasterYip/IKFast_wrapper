@@ -17,16 +17,9 @@ using namespace ikfast;
 
 namespace IKFAST_NAMESPACE
 {
-    /**
-     * @brief
-     *
-     * @param[in] trans
-     * @param[out] solution
-     * @return true
-     * @return false
-     */
+
     bool IKFast_trans3D(const double trans[3], double solret[10][3]);
 
-    std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans);
+    std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans, bool approx);
 
 } // namespace IKFAST_NAMESPACE

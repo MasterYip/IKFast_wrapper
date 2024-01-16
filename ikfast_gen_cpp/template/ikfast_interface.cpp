@@ -9,16 +9,11 @@
 
 /* internal project header files */
 
+#define APPROX_ITER 10 // Approximation iteration
+
 namespace IKFAST_NAMESPACE
 {
-    /**
-     * @brief
-     *
-     * @param[in] trans
-     * @param[out] solution
-     * @return true
-     * @return false
-     */
+
     bool IKFast_trans3D(const double trans[3], double solret[10][3])
     {
         IkReal eerot[9];
@@ -49,42 +44,85 @@ namespace IKFAST_NAMESPACE
         }
     }
 
-    std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans)
+    std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans, bool approx = false)
     {
         IkReal eerot[9];
         IkReal eetrans[3];
+        IkReal eeorigin[3];
+        IkReal eetmp[3];
         std::vector<std::vector<double>> solret;
         IkSolutionList<IkReal> solutions;
         std::vector<IkReal> vfree(GetNumFreeParameters());
-        if (trans.size() != 3)
+        // Judge
+        if ((!approx && trans.size() != 3) || (approx && trans.size() != 6))
         {
-            throw std::invalid_argument("trans must be a vector of size 3");
+            throw std::invalid_argument("trans must be of size 3 (pos) when approx is False,\
+                                         size 6 (pos, origin) when approx is True");
         }
 
         for (int i = 0; i < 3; ++i)
         {
             eetrans[i] = trans[i];
         }
+        if (approx)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                eeorigin[i] = trans[i + 3];
+            }
+        }
         bool bSuccess = ComputeIk(eetrans, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
         if (!bSuccess)
         {
-            return solret;
-        }
-        else
-        {
-            std::vector<IkReal> solvalues(GetNumJoints());
-            for (std::size_t i = 0; i < solutions.GetNumSolutions(); ++i)
+            // dichotomy
+            if (approx)
             {
-                const IkSolutionBase<IkReal> &sol = solutions.GetSolution(i);
-                std::vector<IkReal> vsolfree(sol.GetFree().size());
-                sol.GetSolution(&solvalues[0], vsolfree.size() > 0 ? &vsolfree[0] : NULL);
-                std::vector<double> solution;
-                // FIXME: use emplace_back
-                for (std::size_t j = 0; j < solvalues.size(); ++j)
-                    solution.push_back(solvalues[j]);
-                solret.push_back(solution);
+                for (int i = 0; i < APPROX_ITER; ++i)
+                {
+                    for (int j = 0; j < 3; ++j)
+                    {
+                        eetmp[j] = (eetrans[j] + eeorigin[j]) / 2;
+                    }
+                    bSuccess = ComputeIk(eetmp, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
+                    if (bSuccess)
+                    {
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            eeorigin[j] = eetmp[j];
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < 3; ++j)
+                        {
+                            eetrans[j] = eetmp[j];
+                        }
+                    }
+                }
+                bSuccess = ComputeIk(eeorigin, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
+                if (!bSuccess) //dicotomy failed
+                {
+                    return solret;
+                }
             }
-            return solret;
+            else
+            {
+                return solret;
+            }
         }
+        std::vector<IkReal> solvalues(GetNumJoints());
+        for (std::size_t i = 0; i < solutions.GetNumSolutions(); ++i)
+        {
+            const IkSolutionBase<IkReal> &sol = solutions.GetSolution(i);
+            std::vector<IkReal> vsolfree(sol.GetFree().size());
+            sol.GetSolution(&solvalues[0], vsolfree.size() > 0 ? &vsolfree[0] : NULL);
+            std::vector<double> solution;
+            for (std::size_t j = 0; j < solvalues.size(); ++j)
+                solution.emplace_back(solvalues[j]);
+            solret.emplace_back(solution);
+        }
+        return solret;
+        
     }
+
 } // namespace IKFAST_NAMESPACE

@@ -13,11 +13,21 @@ using namespace @TEST_NS@;
 
 int main()
 {
-    // double trans[3] = {0.0, 0.0, 0.0};
-    // double solret[10][3];
+    bool approx = false;
     std::vector<double> trans = {0.0, 0.0, 0.0};
+    std::cout << "Input trans:";
+    std::cin >> trans[0] >> trans[1] >> trans[2];
+    std::cout << "Approx?:";
+    std::cin >> approx;
+    if (approx)
+    {
+        trans.resize(6);
+        std::cout << "Input origin:";
+        std::cin >> trans[3] >> trans[4] >> trans[5];
+    }
+
     std::vector<std::vector<double>> solret;
-    solret = IKFast_trans3D(trans);
+    solret = IKFast_trans3D(trans, approx);
     for (int i = 0; i < solret.size(); i++)
     {
         for (int j = 0; j < solret[i].size(); j++)
@@ -26,6 +36,9 @@ int main()
         }
         std::cout << std::endl;
     }
+
+    // double trans[3] = {0.0, 0.0, 0.0};
+    // double solret[10][3];
     // IKFast_trans3D(trans, solret);
     // for (int i = 0; i < 10; i++)
     // {
