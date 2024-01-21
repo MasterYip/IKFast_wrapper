@@ -31,6 +31,8 @@ NOTE: C++ lib generation support multiple files, but python binding generation o
     set(LIB_NAME <your-lib-name>)
    ```
 
+   > Note: lib name should be different from source file name
+
 4. Generate your ikfast lib
 
    ```bash
