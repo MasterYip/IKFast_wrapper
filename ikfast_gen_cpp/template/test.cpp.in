@@ -28,9 +28,9 @@ int main()
 
     std::vector<std::vector<double>> solret;
     solret = IKFast_trans3D(trans, approx);
-    for (int i = 0; i < solret.size(); i++)
+    for (uint i = 0; i < solret.size(); i++)
     {
-        for (int j = 0; j < solret[i].size(); j++)
+        for (uint j = 0; j < solret[i].size(); j++)
         {
             std::cout << solret[i][j] << " ";
         }
