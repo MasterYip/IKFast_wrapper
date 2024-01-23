@@ -100,7 +100,7 @@ namespace IKFAST_NAMESPACE
                     }
                 }
                 bSuccess = ComputeIk(eeorigin, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
-                if (!bSuccess) //dicotomy failed
+                if (!bSuccess) // dicotomy failed
                 {
                     return solret;
                 }
@@ -122,7 +122,37 @@ namespace IKFAST_NAMESPACE
             solret.emplace_back(solution);
         }
         return solret;
-        
     }
+
+#ifdef USE_EIGEN
+    std::vector<Eigen::Vector3d> IKFast_trans3D(const Eigen::Vector3d trans)
+    {
+        IkReal eerot[9];
+        IkReal eetrans[3];
+        IkSolutionList<IkReal> solutions;
+        std::vector<IkReal> vfree(GetNumFreeParameters());
+        std::vector<Eigen::Vector3d> solret;
+        Eigen::Vector3d soltmp;
+        for (int i = 0; i < 3; ++i)
+        {
+            eetrans[i] = trans[i];
+        }
+        bool bSuccess = ComputeIk(eetrans, eerot, vfree.size() > 0 ? &vfree[0] : NULL, solutions);
+        if (bSuccess)
+        {
+            std::vector<IkReal> solvalues(GetNumJoints());
+            for (std::size_t i = 0; i < solutions.GetNumSolutions(); ++i)
+            {
+                const IkSolutionBase<IkReal> &sol = solutions.GetSolution(i);
+                std::vector<IkReal> vsolfree(sol.GetFree().size());
+                sol.GetSolution(&solvalues[0], vsolfree.size() > 0 ? &vsolfree[0] : NULL);
+                for (std::size_t j = 0; j < solvalues.size(); ++j)
+                    soltmp[j] = solvalues[j];
+                solret.emplace_back(soltmp);
+            }
+        }
+        return solret;
+    }
+#endif
 
 } // namespace IKFAST_NAMESPACE

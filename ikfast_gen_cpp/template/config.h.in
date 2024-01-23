@@ -1,3 +1,7 @@
 // config.h.in
 #define IKFAST_NO_MAIN
 #define IKFAST_NAMESPACE @IKFAST_NAMESPACE@
+#if @USE_EIGEN@
+#define USE_EIGEN
+#include <Eigen/Core>
+#endif

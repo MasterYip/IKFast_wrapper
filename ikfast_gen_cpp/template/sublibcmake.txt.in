@@ -21,3 +21,6 @@ include_directories(
 )
 
 add_library(${IKFAST_NAMESPACE} ${SOURCES})
+if(@USE_EIGEN@)
+    target_link_libraries(${IKFAST_NAMESPACE} Eigen3::Eigen)
+endif()

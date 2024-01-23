@@ -22,4 +22,7 @@ namespace IKFAST_NAMESPACE
 
     std::vector<std::vector<double>> IKFast_trans3D(const std::vector<double> trans, bool approx);
 
+#ifdef USE_EIGEN
+    std::vector<Eigen::Vector3d> IKFast_trans3D(const Eigen::Vector3d trans);
+#endif
 } // namespace IKFAST_NAMESPACE

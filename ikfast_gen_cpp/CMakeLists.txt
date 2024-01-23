@@ -5,6 +5,10 @@ project(IKFast_warpper)
 # IMPORTANT This is also the name of generated cmake project & header file
 set(LIB_NAME ikfast_example_lib)
 
+# Use Eigen
+set(USE_EIGEN 1)
+
+# Colored output
 if(NOT WIN32)
     string(ASCII 27 Esc)
     set(ColourReset "${Esc}[m")
@@ -14,7 +18,7 @@ if(NOT WIN32)
 endif()
 message(STATUS "${Green}Generating IKFast library for ${ColourBold}${LIB_NAME}${ColourReset}")
 
-## Settings
+## Setup
 include(cmake/addIKFast.cmake)
 add_compile_options(-O3 -Wall -shared -fPIC)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
@@ -23,6 +27,11 @@ set(TEMPLATE_DIR ${CMAKE_SOURCE_DIR}/template)
 set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 set(BUILD_DIR ${CMAKE_BINARY_DIR}/temp)
 set(LIB_DIR ${CMAKE_SOURCE_DIR}/lib/${LIB_NAME})
+
+if(USE_EIGEN)
+    find_package(Eigen3 REQUIRED)
+    include_directories(${EIGEN3_INCLUDE_DIR})
+endif()
 
 ## Generate IKFast library
 file(GLOB IKFAST_SRC_LIST ${SRC_DIR}/*.cpp)
