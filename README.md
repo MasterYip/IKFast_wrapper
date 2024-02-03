@@ -2,7 +2,10 @@
 
 ## Usage
 
-NOTE: C++ lib generation support multiple files, but python binding generation only support one file once a time.
+NOTE:
+
+1. C++ lib generation **support multiple files**, but python binding generation **only support one file once a time**.
+2. Temporarily this repo **only support 3D translation**. You can modify the interface to support more.
 
 ### C++ lib generation
 
