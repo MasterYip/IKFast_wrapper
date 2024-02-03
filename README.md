@@ -88,7 +88,7 @@ Note: if you want change the interface, you can modify `ikfast_interface.h`, `ik
 
 ## Examples
 
-### ElSpider
+### ElSpider2
 
 Leg config is axial symmetry.
 
@@ -100,11 +100,18 @@ pos = m.actInv(target)
 sol = ik.IKFast_trans3D(list(pos))
 ```
 
-### ElSpider Mini
+### ElSpider Air
 
-![ElSpiderMini](doc/ElSpiderMini.png)
-
-Clockwise leg index in the img: [0, 1, 2, 3, 4, 5]
+```txt
+               head
+  (leg3)LF ------------- RF(leg0)
+           |           |
+           |     x     |
+  (leg4)LM |  y__|     | RM(leg1)
+           |           |
+           |           |
+  (leg5)LB ------------- RB(leg2)
+```
 
 Default config q0:
 
