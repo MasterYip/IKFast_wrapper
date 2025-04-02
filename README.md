@@ -28,7 +28,7 @@ Filling the blanks:
 
 ![alt text](doc/ikfast_gen_blanks.png)
 
-> ![Attention]
+> [!WARNING]
 > The third row should be filled with the index of the **JOINT** that will not change during the IK calculation, which is called `Free Joint` in `IKFast`. In this case, the joint between `RF_SHANK` and `RF_FOOT` is the `Free Joint`, so the index should be `3`.
 > More details can be found in the [IKFast documentation](https://openrave.org/docs/latest_stable/openravepy/ikfast/).
 
