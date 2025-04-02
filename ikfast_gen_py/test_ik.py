@@ -5,7 +5,9 @@ if not '.' in sys.path:
     sys.path.append('.')
 
 from build import pyikfast_el_mini_back as ik
+# from build import pyikfast_el_mini as ik_mirror
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 JOINT_STATE_NAME = ["LB_HAA", "LB_HFE", "LB_KFE",
@@ -31,8 +33,9 @@ def get_sol(target, origin, approx=False):
     target = target*mirror_trans[foot_index][0] + mirror_trans[foot_index][1]
     origin = origin*mirror_trans[foot_index][0] + mirror_trans[foot_index][1]
     if foot_index in [2, 5]:
-        pass
-        # sol = ik_back.IKFast_trans3D(list(target)+list(origin), True)
+        # Temporarily we only have pyikfast_el_mini_back
+        # sol = ik_mirror.IKFast_trans3D(list(target)+list(origin), True)
+        raise ValueError("Not implemented")
     else:
         if approx:
             sol = ik.IKFast_trans3D(list(target)+list(origin), True)
@@ -42,28 +45,28 @@ def get_sol(target, origin, approx=False):
 
 
 if __name__ == "__main__":
+    # Origin for IK approximation
     origin = np.array([0.35350208, -0.22998902, -0.1360558])
-    # print(ik_back.IKFast_trans3D(origin, False))
+    
+    # Calculate all solutions along a ray from origin
     sols = []
     num = 100
     dir = [1, 0, 0]
     for i in range(num):
-        target = float(i/num)*np.array(dir)
-        sols.append(get_sol(target+origin, origin, True))
-        print()
+        direction = float(i/num)*np.array(dir)
+        sols.append(get_sol(direction+origin, origin, True))
 
     pts = []
     for i in range(num):
         for pt in sols[i]:
             pts.append(pt)
-        # if len(sols[i]) > 0:
-        #     pts.append(sols[i][0])
 
     # 3D scatter
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d', aspect='equal',
+    ax = fig.add_subplot(111, projection='3d',
                          xlim=(-pi, pi), ylim=(-pi, pi), zlim=(-pi, pi))
 
     ax.scatter([pt[0] for pt in pts], [pt[1]
                for pt in pts], [pt[2] for pt in pts], c=[0.1, 0.4, 0.0, 0.2])
+    print("IK solutions along a ray from origin are drawn in Configuration Space.")
     plt.show()

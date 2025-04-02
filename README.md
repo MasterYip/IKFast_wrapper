@@ -7,6 +7,33 @@ NOTE:
 1. C++ lib generation **support multiple files**, but python binding generation **only support one file once a time**.
 2. Temporarily this repo **only support 3D translation**. You can modify the interface to support more.
 
+### [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) Usage
+
+After uploading your single leg URDF, links and indices will be displayed:
+
+```txt
+name            index parents
+------------------------------
+BASE            0
+RF_HIP          1     BASE
+RF_THIGH        2     RF_HIP
+RF_SHANK        3     RF_THIGH
+RF_FOOT         4     RF_SHANK
+RF_KFE_CollBall 5     RF_THIGH
+RF_HFE_CollBall 6     RF_HIP
+------------------------------
+```
+
+Filling the blanks:
+
+![alt text](doc/ikfast_gen_blanks.png)
+
+> ![Attention]
+> The third row should be filled with the index of the **JOINT** that will not change during the IK calculation, which is called `Free Joint` in `IKFast`. In this case, the joint between `RF_SHANK` and `RF_FOOT` is the `Free Joint`, so the index should be `3`.
+> More details can be found in the [IKFast documentation](https://openrave.org/docs/latest_stable/openravepy/ikfast/).
+
+Examples of IKFast generation can be found in folder [`cpp_demos_for_generation`](cpp_demos_for_generation).
+
 ### C++ lib generation
 
 1. Use [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) to generate your IK algorithm
@@ -51,13 +78,20 @@ Note: if you want change the interface, you can modify `ikfast_interface.h`, `ik
 
 ### Python binding generation
 
+Prerequisite: `pybind11` should be installed.
+
+```bash
+pip install pybind11
+sudo apt install pybind11-dev
+```
+
 1. Use [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) to generate your IK algorithm
 
    > Note: for 3DTranslation there should be an intermediate link and joint between root link BASE and the arm (unknown reason)
 
 2. Replace ikfast_gen.cpp with your file
 
-3. Rename pybind module in CMakeLists.txt
+3. Rename your module in CMakeLists.txt
 
    ```CMakeLists
    ## Settings
@@ -82,7 +116,15 @@ Note: if you want change the interface, you can modify `ikfast_interface.h`, `ik
    make
    ```
 
-5. Get your cpython module in /build and use it like:
+   or use `build.sh`
+
+   ```bash
+   sh build.sh
+   ```
+
+   > Note: DO NOT use conda python, it may cause some problems.
+
+5. Get your cpython module in `build` and use it like:
 
    ```python
    from .pyikfast import pyikfast_el_mini as ik
@@ -116,41 +158,15 @@ sol = ik.IKFast_trans3D(list(pos))
   (leg5)LB ------------- RB(leg2)
 ```
 
-Default config q0:
+Robot foot positions under config `q0 = [0]*18`:
 
 ```txt
-[ 0.35350208 -0.22998902 -0.1360558 ]
-[ 0.05350208 -0.28998902 -0.1360558 ]
-[-0.35349792 -0.22998928 -0.1360562 ]
-[ 0.35350208  0.2299882  -0.1360569 ]
-[ 0.05350208  0.2899882  -0.1360569 ]
-[-0.35350133  0.22998794 -0.13605704]
+leg0: [ 0.35350208 -0.22998902 -0.1360558 ]
+leg1: [ 0.05350208 -0.28998902 -0.1360558 ]
+leg2: [-0.35349792 -0.22998928 -0.1360562 ]
+leg3: [ 0.35350208  0.2299882  -0.1360569 ]
+leg4: [ 0.05350208  0.2899882  -0.1360569 ]
+leg5: [-0.35350133  0.22998794 -0.13605704]
 ```
 
-```python
-from .pyikfast import pyikfast_el_mini as ik
-from .pyikfast import pyikfast_el_mini_back as ik_back
-
-JOINT_STATE_NAME = ["LB_HAA", "LB_HFE", "LB_KFE",
-                    "LF_HAA", "LF_HFE", "LF_KFE",
-                    "LM_HAA", "LM_HFE", "LM_KFE",
-                    "RB_HAA", "RB_HFE", "RB_KFE",
-                    "RF_HAA", "RF_HFE", "RF_KFE",
-                    "RM_HAA", "RM_HFE", "RM_KFE"]
-
-FOOT_LINK_NAME = ["RF_FOOT", "RM_FOOT", "RB_FOOT",
-                  "LF_FOOT", "LM_FOOT", "LB_FOOT"]
-target = [-0.35350133, 0.22998794, -0.13605704]
-foot_index = 0
-mirror_trans = [(np.array((1, 1, 1)), np.array((0, 0, 0))),
-                (np.array((1, 1, 1)), np.array((0.3, 0.06, 0))),
-                (np.array((1, -1, 1)), np.array((0, 0, 0))),
-                (np.array((1, -1, 1)), np.array((0, 0, 0))),
-                (np.array((1, -1, 1)), np.array((0.3, 0.06, 0))),
-                (np.array((1, 1, 1)), np.array((0, 0, 0))),]
-pos = target*mirror_trans[foot_index][0] + mirror_trans[foot_index][1]
-if foot_index in [2, 5]:
-    sol = ik_back.IKFast_trans3D(list(pos))
-else:
-    sol = ik.IKFast_trans3D(list(pos))
-```
+Detailed python example can be found in [`ikfast_gen_py/test_ik.py`](ikfast_gen_py/test_ik.py).
