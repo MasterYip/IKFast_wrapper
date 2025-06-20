@@ -7,7 +7,7 @@ NOTE:
 1. C++ lib generation **support multiple files**, but python binding generation **only support one file once a time**.
 2. Temporarily this repo **only support 3D translation**. You can modify the interface to support more.
 
-### [IKFast Generator](https://www.hamzamerzic.info/ikfast_generator/) Usage
+### [IKFast Generator](https://hamzamerzic.info/ikfast/) Usage
 
 After uploading your single leg URDF, links and indices will be displayed:
 
